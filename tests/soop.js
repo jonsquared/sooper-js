@@ -156,5 +156,122 @@ describe('SOOP', function() {
 			expect(test.superVar).toBe(1);
 			expect(test.superFunc()).toBe(1);
 		});
+
+		it('cleanup', function() {
+			soop.undefine('TestClass');
+			soop.undefine('SuperClass');
+		});
+	});
+
+	describe('implementing interfaces (basic)', function() {
+		it('can implement a single interface', function() {
+			soop.define('TestInterface', {
+				constructor:function(){},
+				interfaceVar: 42,
+				interfaceFunc: function(){}
+			});
+			soop.define('TestClass', {
+				implements: TestInterface,
+				constructor: function() {}
+			});
+			expect(TestClass.prototype.interfaceVar).toBe(42);
+			expect(TestClass.prototype.interfaceFunc).toBe(TestInterface.prototype.interfaceFunc);
+			soop.undefine('TestClass');
+		});
+
+		it('can implement multiple interfaces', function() {
+			soop.define('TestInterface2', {
+				constructor:function(){},
+				interface2Var: 21,
+				interface2Func: function(){}
+			});
+			soop.define('TestClass', {
+				implements: [TestInterface,TestInterface2],
+				constructor: function() {}
+			});
+			expect(TestClass.prototype.interfaceVar).toBe(42);
+			expect(TestClass.prototype.interfaceFunc).toBe(TestInterface.prototype.interfaceFunc);
+			expect(TestClass.prototype.interface2Var).toBe(21);
+			expect(TestClass.prototype.interface2Func).toBe(TestInterface2.prototype.interface2Func);
+		});
+
+		it('can be instantiated', function() {
+			var test = new TestClass();
+			expect(test.interfaceVar).toBe(42);
+			expect(test.interfaceFunc).toBe(TestInterface.prototype.interfaceFunc);
+			expect(test.interface2Var).toBe(21);
+			expect(test.interface2Func).toBe(TestInterface2.prototype.interface2Func);			
+		});
+
+		it('cleanup', function() {
+			soop.undefine('TestClass');
+			soop.undefine('TestInterface2');
+			soop.undefine('TestInterface');
+		});
+	});
+
+	describe('implementing interfaces (advanced)', function() {
+		it('can implement an interface that implements an interface', function() {
+			soop.define('TestInterface1', {
+				constructor:function(){},
+				interface1Var: 1,
+				interface1Func: function(){}
+			});
+			soop.define('TestInterface2', {
+				implements: TestInterface1,
+				constructor:function(){},
+				interface2Var: 2,
+				interface2Func: function(){}
+			});
+			soop.define('TestClass', {
+				implements: TestInterface2,
+				constructor: function() {}
+			});
+			expect(TestClass.prototype.interface1Var).toBe(1);
+			expect(TestClass.prototype.interface1Func).toBe(TestInterface1.prototype.interface1Func);
+			expect(TestClass.prototype.interface2Var).toBe(2);
+			expect(TestClass.prototype.interface2Func).toBe(TestInterface2.prototype.interface2Func);
+			soop.undefine('TestClass');
+			soop.undefine('TestInterface2');
+			soop.undefine('TestInterface1');
+		});
+
+		it('later interfaces override earlier interfaces', function() {
+			soop.define('TestInterface1', {
+				constructor:function(){},
+				testVar: 1,
+				testFunc: function(){ return 1; }
+			});
+			soop.define('TestInterface2', {
+				constructor:function(){},
+				testVar: 2,
+				testFunc: function(){ return 2; }
+			});
+			soop.define('TestClass', {
+				implements: [TestInterface1,TestInterface2],
+				constructor: function() {}
+			});
+			expect(TestClass.prototype.testVar).toBe(2);
+			expect(TestClass.prototype.testFunc).toBe(TestInterface2.prototype.testFunc);
+		});
+
+		it('class properties override interface properties', function() {
+			soop.define('TestInterface', {
+				constructor:function(){},
+				testVar: 1,
+				testFunc: function(){return 1;}
+			});
+			soop.define('TestClass', {
+				implements: TestInterface,
+				testVar: 2,
+				testFunc: function(){return 2;},
+				constructor: function() {}
+			});
+			var test = new TestClass();
+			expect(test.testVar).toBe(2);
+			expect(test.testFunc()).toBe(2);
+			soop.undefine('TestClass');
+			soop.undefine('TestInterface');
+		});
 	});
 });
