@@ -116,7 +116,7 @@ describe('SOOP', function() {
 		});
 	});
 
-	describe('inheriting a class', function() {
+	describe('inheriting a class (basic)', function() {
 		it('can inherit', function() {
 			soop.define('SuperClass', {
 				superVar: 42,
@@ -124,7 +124,8 @@ describe('SOOP', function() {
 					if(arguments.length)
 						this.superVar = value;
 				},
-				superFunc: function() { return this.superVar; }
+				superFunc: function() { return this.superVar; },
+				commonFunc: function() { return 1; }
 			});
 			soop.define('TestClass', {
 				inherits: SuperClass,
@@ -134,7 +135,8 @@ describe('SOOP', function() {
 					if (arguments.length)
 						this.subVar = value + 1;
 				},
-				subFunc: function() { return this.subVar; }
+				subFunc: function() { return this.subVar; },
+				commonFunc: function() { return 2; }
 			});
 			expect(TestClass.prototype.constructor).toBe(SuperClass);
 		});
@@ -157,9 +159,53 @@ describe('SOOP', function() {
 			expect(test.superFunc()).toBe(1);
 		});
 
+		it('overrides super class properties', function() {
+			var test = new TestClass();
+			expect(test.commonFunc()).toBe(2);
+		});
+
 		it('cleanup', function() {
 			soop.undefine('TestClass');
 			soop.undefine('SuperClass');
+		});
+	});
+
+	describe('inheriting a class (advanced)', function() {
+		it('can call super constructor', function() {
+			soop.define('SuperClass', {
+				constructor: function(value) {
+					this.testVar1 = value;
+				}
+			});
+			soop.define('TestClass', {
+				inherits: SuperClass,
+				constructor: function(value) {
+					this.super(value);
+					this.testVar2 = value*2;
+				}
+			});
+			var test = new TestClass(42);
+			expect(test.testVar1).toBe(42);
+			expect(test.testVar2).toBe(84);
+		});
+
+		it('can call super function on super class', function() {
+			soop.define('SuperClass', {
+				testVar: 1,
+				constructor: function() {},
+				testFunc: function(value) {
+					return this.testVar+value;
+				}
+			});
+			soop.define('TestClass', {
+				inherits: SuperClass,
+				constructor: function() {},
+				testFunc: function me(value) {
+					return me.super.call(this,value) + 1;
+				}
+			});
+			var test = new TestClass();
+			expect(test.testFunc(1)).toBe(3);
 		});
 	});
 
@@ -272,6 +318,25 @@ describe('SOOP', function() {
 			expect(test.testFunc()).toBe(2);
 			soop.undefine('TestClass');
 			soop.undefine('TestInterface');
+		});
+
+		it('can call overriden function on interface via super', function() {
+			soop.define('TestInterface', {
+				testVar: 1,
+				constructor: function() {},
+				testFunc: function(value) {
+					return this.testVar+value;
+				}
+			});
+			soop.define('TestClass', {
+				implements: TestInterface,
+				constructor: function() {},
+				testFunc: function me(value) {
+					return me.super.call(this,value) + 1;
+				}
+			});
+			var test = new TestClass();
+			expect(test.testFunc(1)).toBe(3);
 		});
 	});
 });
