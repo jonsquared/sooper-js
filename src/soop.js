@@ -1,6 +1,8 @@
 soop = {
 	define: function (name, config) {
-		var c = window[name] = config.constructor,
+		var className = this.getClassNameWithoutNamespace(name),
+			namespace = this.getNamespaceObjectFromClassName(name),
+			c = namespace[className] = config.constructor,
 			proto, props;
 		if (!c)
 			throw new Error('A constructor function must be defined.');
@@ -40,7 +42,49 @@ soop = {
 			}
 		}
 	},
+
 	undefine: function (name) {
-		delete window[name];
+		var className = this.getClassNameWithoutNamespace(name),
+			namespace = this.getNamespaceObjectFromClassName(name);
+		delete namespace[className];
+		if (namespace !== window && Object.keys(namespace).length == 0)
+			this.cleanupNamespace(name.substring(0,name.lastIndexOf('.')));
+	},
+
+	getClassNameWithoutNamespace: function(name) {
+		return name.substring(name.lastIndexOf('.')+1);
+	},
+
+	getNamespaceObjectFromClassName: function(name) {
+		var names = name.split('.'),
+			namespace = window;
+		for (var i=0; i<names.length-1; i++) {
+			var nextName = names[i];
+			if (namespace[nextName])
+				namespace = namespace[nextName];
+			else
+				namespace = namespace[nextName] = {};
+		}
+		return namespace;
+	},
+
+	cleanupNamespace: function(name) {
+		var names = name.split('.'),
+			namespaces = [window],
+			namespace = window;
+		for (var i=0; i<names.length; i++) {
+			var nextName = names[i];
+			namespace = namespace[nextName];
+			namespaces.push(namespace);
+		}
+		for (var i=namespaces.length; --i; ) {
+			var parentNamespace = namespaces[i-1],
+				name = names[i-1];
+			namespace = namespaces[i];
+			if (Object.keys(namespace).length == 0)
+				delete parentNamespace[name];
+			else
+				break;
+		}
 	}
 }

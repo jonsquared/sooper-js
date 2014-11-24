@@ -114,6 +114,59 @@ describe('SOOP', function() {
 				soop.undefine('TestClass');
 			});
 		});
+
+		describe('with a namespace', function() {
+			describe('single level', function(){
+				soop.define('namespace.TestClass1', {
+					constructor: function() {
+						this.test = true;
+					}
+				});
+				soop.define('namespace.TestClass2', {
+					constructor: function() {
+						this.test = true;
+					}
+				});
+
+				it('is created', function() {
+					expect(namespace).toBeDefined();
+					expect(namespace.TestClass1).toBeDefined();
+					expect(namespace.TestClass2).toBeDefined();
+					expect((new namespace.TestClass1).test).toBe(true);
+					expect((new namespace.TestClass2).test).toBe(true);
+				});
+
+				it('when class is undefined, but namespace is not empty, namespace remains', function() {
+					soop.undefine('namespace.TestClass2');
+					expect(namespace).toBeDefined();
+				});
+
+				it('when class is undefined and namespace becomes empty, namespace is undefined', function() {
+					soop.undefine('namespace.TestClass1');
+					expect(window.namespace).not.toBeDefined();
+				});
+			});
+
+			describe('multiple levels', function() {
+				soop.define('namespace1.namespace2.TestClass', {
+					constructor: function() {
+						this.test = true;
+					}
+				});
+
+				it('is created', function() {
+					expect(namespace1).toBeDefined();
+					expect(namespace1.namespace2).toBeDefined();
+					expect(namespace1.namespace2.TestClass).toBeDefined();
+					expect((new namespace1.namespace2.TestClass).test).toBe(true);
+				});
+
+				it('when class is undefined and namespace becomes empty, namespace is undefined', function() {
+					soop.undefine('namespace1.namespace2.TestClass');
+					expect(window.namespace1).not.toBeDefined();
+				});
+			});
+		});
 	});
 
 	describe('inheriting a class (basic)', function() {
