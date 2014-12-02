@@ -3,6 +3,12 @@ describe('SOOP', function() {
 		expect(soop).toBeDefined();
 	});
 
+	it('has only public functions', function() {
+		expect(Object.getOwnPropertyNames(soop).length).toBe(2);
+		expect(soop.hasOwnProperty('define')).toBe(true);
+		expect(soop.hasOwnProperty('undefine')).toBe(true);
+	});
+
 	describe('defining a class', function() {
 		describe('with no members', function() {
 			it('can be defined', function() {
@@ -117,15 +123,17 @@ describe('SOOP', function() {
 
 		describe('with a namespace', function() {
 			describe('single level', function(){
-				soop.define('namespace.TestClass1', {
-					constructor: function() {
-						this.test = true;
-					}
-				});
-				soop.define('namespace.TestClass2', {
-					constructor: function() {
-						this.test = true;
-					}
+				it('setup', function() {
+					soop.define('namespace.TestClass1', {
+						constructor: function() {
+							this.test = true;
+						}
+					});
+					soop.define('namespace.TestClass2', {
+						constructor: function() {
+							this.test = true;
+						}
+					});
 				});
 
 				it('is created', function() {
@@ -148,10 +156,12 @@ describe('SOOP', function() {
 			});
 
 			describe('multiple levels', function() {
-				soop.define('namespace1.namespace2.TestClass', {
-					constructor: function() {
-						this.test = true;
-					}
+				it('setup', function() {					
+					soop.define('namespace1.namespace2.TestClass', {
+						constructor: function() {
+							this.test = true;
+						}
+					});
 				});
 
 				it('is created', function() {
@@ -224,6 +234,11 @@ describe('SOOP', function() {
 	});
 
 	describe('inheriting a class (advanced)', function() {
+		afterEach(function() {
+			soop.undefine('TestClass');
+			soop.undefine('SuperClass');
+		});
+
 		it('can call super constructor', function() {
 			soop.define('SuperClass', {
 				constructor: function(value) {
@@ -352,6 +367,9 @@ describe('SOOP', function() {
 			});
 			expect(TestClass.prototype.testVar).toBe(2);
 			expect(TestClass.prototype.testFunc).toBe(TestInterface2.prototype.testFunc);
+			soop.undefine('TestClass');
+			soop.undefine('TestInterface2');
+			soop.undefine('TestInterface1');
 		});
 
 		it('class properties override interface properties', function() {
