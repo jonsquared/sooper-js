@@ -3,6 +3,12 @@ describe('SOOP', function() {
 		expect(soop).toBeDefined();
 	});
 
+	it('has only public functions', function() {
+		expect(Object.getOwnPropertyNames(soop).length).toBe(2);
+		expect(soop.hasOwnProperty('define')).toBe(true);
+		expect(soop.hasOwnProperty('undefine')).toBe(true);
+	});
+
 	describe('defining a class', function() {
 		describe('with no members', function() {
 			it('can be defined', function() {
