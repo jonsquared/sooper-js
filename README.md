@@ -74,3 +74,16 @@ Notes:
 	var test = new TestClass();
 	test.func1(); //2
 	test.func2(); //4
+
+###Testing and building
+
+Tests are written as jasmine tests and configured for the karma test runner.
+To run the tests, navigate to the tests directory and run:
+
+	karma start karma.config.js --single-run
+
+Building soop requires Apache Ant and uglifyjs.
+To build soop, navigate to the root directory and run:
+
+	ant
+
