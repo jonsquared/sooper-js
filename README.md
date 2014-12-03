@@ -3,11 +3,16 @@ SOOP
 
 Simple Object Oriented Programming framework for JavaScript. It's light-weight and efficient.
 
+This framework requires *ECMAScript 5*
+
 Usage
 -----
 
 ###Defining a class
-Note: Every class must have a constructor defined
+Notes:
+* Every class must at least define a constructor
+* A class may have a namespace 0 or more levels deep ('.' separated)
+* Property descriptors will be preserved (configurable, enumerable, writable, etc...)
 
 	soop.define('app.namespace.TestClass', {
 		value: 42,
