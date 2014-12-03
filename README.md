@@ -8,6 +8,7 @@ Usage
 
 ###Defining a class
 Note: Every class must have a constructor defined
+
 	soop.define('app.namespace.TestClass', {
 		value: 42,
 		constructor: function() {},
@@ -18,6 +19,7 @@ Note: Every class must have a constructor defined
 	test.getValue(); //42
 
 ###Inheriting a super class
+
 	soop.define('SuperClass', {
 		value: 0,
 		constructor: function(value) { this.value = value; },
@@ -40,6 +42,7 @@ Note: Every class must have a constructor defined
 	test.func(); //2
 
 ###Implementing interfaces
+
 	soop.define('Interface1', {
 		constructor: function() {},
 		func1: function() { return 1; }
