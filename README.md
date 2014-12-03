@@ -14,6 +14,7 @@ Notes:
 * A class may have a namespace 0 or more levels deep ('.' separated)
 * Property descriptors will be preserved (configurable, enumerable, writable, etc...)
 
+<!--end of the list -->
 
 	soop.define('app.namespace.TestClass', {
 		value: 42,
