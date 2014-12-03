@@ -1,8 +1,16 @@
 soop = (function() {
+	//These vars are purely for better minification
+	var o = Object,
+		defineProperty = o.defineProperty,
+		getOwnPropertyNames = o.getOwnPropertyNames,
+		getOwnPropertyDescriptor = o.getOwnPropertyDescriptor;
+
 	function define(fullName, config) {
+		//<debug>
 		var c = config.constructor;
 		if (!c || typeof(c) != 'function')
 			throw new Error('A constructor function must be defined.');
+		//</debug>
 		setupClassNamespace(fullName, config);
 		setupSuperClass(config);
         setupClassInterfaces(config);
@@ -25,57 +33,55 @@ soop = (function() {
 	function setupClassNamespace(fullName, config) {
 		var className = getClassNameFromFullName(fullName),
 			namespace = getNamespaceFromFullName(fullName);
+		//<debug>
 		if (namespace[className])
 			throw new Error('Class "'+className+'" is already defined.');
+		//</debug>
 		namespace[className] = config.constructor;
 	}
 
 	function setupSuperClass(config) {
-		if (config.inherits) {
+		var superClass = config.inherits;
+		if (superClass) {
 			var c = config.constructor,
-				proto = c.prototype = Object.create(config.inherits.prototype);
-			proto.super = config.inherits;
+				proto = c.prototype = Object.create(superClass.prototype);
+			proto.super = superClass;
 		}
 	}
 
 	function setupClassProperties(config) {
 		var	proto = config.constructor.prototype,
-			props = Object.getOwnPropertyNames(config);
+			props = getOwnPropertyNames(config);
         for (var i=props.length; i--; ) {
         	var propName = props[i];
         	if (propertyNameIsKeyword(propName))
         		continue;
 			var overriddenPropVal = proto[propName];
-            Object.defineProperty(proto, propName, Object.getOwnPropertyDescriptor(config, propName));
+            defineProperty(proto, propName, getOwnPropertyDescriptor(config, propName));
             if (overriddenPropVal && (proto[propName] instanceof Function))
             	proto[propName].super = overriddenPropVal;
 		}
 	}
 
 	function propertyNameIsKeyword(propName) {
-		switch(propName) {
-			case "constructor":
-			case "inherits":
-			case "implements":
-				return true;
-		}
-		return false;
+		return propName == "constructor" ||
+			   propName == "inherits" ||
+			   propName == "implements";
 	}
 
 	function setupClassInterfaces(config) {
 		var interfaces = config.implements;
 		if (!interfaces)
 			return;
-		var c = config.constructor,
-			proto = c.prototype;
+		var proto = config.constructor.prototype;
 		if (!interfaces.push)
 			interfaces = [interfaces];
 		for (var iIndex=0; iIndex<interfaces.length; iIndex++ ) {
 			var iproto = interfaces[iIndex].prototype,
-				iprops = Object.getOwnPropertyNames(iproto);
+				iprops = getOwnPropertyNames(iproto);
 			for (var ipropIndex=iprops.length; ipropIndex--; ) {
 				var ipropName = iprops[ipropIndex];
-	            Object.defineProperty(proto, ipropName, Object.getOwnPropertyDescriptor(iproto, ipropName));
+	            defineProperty(proto, ipropName, getOwnPropertyDescriptor(iproto, ipropName));
 	        }
 	    }
 	}
@@ -84,6 +90,7 @@ soop = (function() {
 		return fullName.substring(fullName.lastIndexOf('.')+1);
 	}
 
+	//<debug>
 	function undefine(fullName) {
 		var className = getClassNameFromFullName(fullName),
 			namespace = getNamespaceFromFullName(fullName);
@@ -111,9 +118,13 @@ soop = (function() {
 				break;
 		}
 	}
+	//</debug>
 
 	return {
 		define: define,
-		undefine: undefine
+		//<debug>
+		undefine: undefine,
+		//</debug>
+		version: '1.0.0'
 	}
 })();
