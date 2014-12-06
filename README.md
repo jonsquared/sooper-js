@@ -85,11 +85,12 @@ To run the tests, navigate to the tests directory and run:
 ###Building
 
 The build is configured for Grunt. The first time building, run the following steps on the command line:
-1. To be able to run grunt on the command line:
+
+To be able to run grunt on the command line:
 
 	npm install -g grunt-cli
 
-2. To install all required grunt plugins by this project:
+To install all required grunt plugins by this project:
 
 	npm install
 
