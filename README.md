@@ -75,15 +75,25 @@ Notes:
 	test.func1(); //2
 	test.func2(); //4
 
-###Testing and building
+###Testing
 
 Tests are written as jasmine tests and configured for the karma test runner.
 To run the tests, navigate to the tests directory and run:
 
 	karma start karma.config.js --single-run
 
-Building soop requires Apache Ant and uglifyjs.
-To build soop, navigate to the root directory and run:
+###Building
 
-	ant
+The build is configured for Grunt. The first time building, run the following steps on the command line:
+1. To be able to run grunt on the command line:
+
+	npm install -g grunt-cli
+
+2. To install all required grunt plugins by this project:
+
+	npm install
+
+To build soop, run:
+
+	grunt
 
