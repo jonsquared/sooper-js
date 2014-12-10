@@ -1,14 +1,12 @@
-var soop = require('../src/soop.js');
-
 describe('SOOP', function() {
+
 	it('exists', function() {
 		expect(soop).toBeDefined();
 	});
 
 	it('has correct properties', function() {
-		expect(Object.getOwnPropertyNames(soop).length).toBe(3);
+		expect(Object.getOwnPropertyNames(soop).length).toBe(2);
 		expect(soop.hasOwnProperty('define')).toBe(true);
-		expect(soop.hasOwnProperty('undefine')).toBe(true);
 		expect(soop.hasOwnProperty('version')).toBe(true);
 		expect(soop.version).toBe("1.1.0");
 	});
@@ -26,7 +24,7 @@ describe('SOOP', function() {
 				}
 				expect(createClassWithoutConstructor).toThrow();
 				expect(createClassWithConstructor).not.toThrow();
-				expect(global.TestClass).toBeDefined();
+				expect(TestClass).toBeDefined();
 				expect(TestClass instanceof Function).toBe(true);			
 			});
 
@@ -36,11 +34,8 @@ describe('SOOP', function() {
 				expect(test instanceof TestClass).toBe(true);
 				expect(Object.getOwnPropertyNames(test).length).toBe(0);
 				expect(Object.keys(test).length).toBe(0);
-			});
 
-			it('can be undefined', function() {
-				soop.undefine('TestClass');
-				expect(global.TestClass).not.toBeDefined();
+				delete TestClass;
 			});
 		});
 
@@ -118,16 +113,14 @@ describe('SOOP', function() {
 				expect(Object.keys(test)).toEqual(['memberVar']);
 				expect(test.memberVar).toBe(21);
 				expect(test.memberFunc()).toBe(21);
-			});
 
-			it('cleanup', function() {
-				soop.undefine('TestClass');
+				delete TestClass;
 			});
 		});
 
 		describe('with a namespace', function() {
 			describe('single level', function(){
-				it('setup', function() {
+				it('is created', function() {
 					soop.define('namespace.TestClass1', {
 						constructor: function() {
 							this.test = true;
@@ -138,46 +131,31 @@ describe('SOOP', function() {
 							this.test = true;
 						}
 					});
-				});
 
-				it('is created', function() {
 					expect(namespace).toBeDefined();
 					expect(namespace.TestClass1).toBeDefined();
 					expect(namespace.TestClass2).toBeDefined();
 					expect((new namespace.TestClass1).test).toBe(true);
 					expect((new namespace.TestClass2).test).toBe(true);
-				});
 
-				it('when class is undefined, but namespace is not empty, namespace remains', function() {
-					soop.undefine('namespace.TestClass2');
-					expect(namespace).toBeDefined();
-				});
-
-				it('when class is undefined and namespace becomes empty, namespace is undefined', function() {
-					soop.undefine('namespace.TestClass1');
-					expect(global.namespace).not.toBeDefined();
+					delete namespace;
 				});
 			});
 
 			describe('multiple levels', function() {
-				it('setup', function() {					
+				it('is created', function() {
 					soop.define('namespace1.namespace2.TestClass', {
 						constructor: function() {
 							this.test = true;
 						}
 					});
-				});
 
-				it('is created', function() {
 					expect(namespace1).toBeDefined();
 					expect(namespace1.namespace2).toBeDefined();
 					expect(namespace1.namespace2.TestClass).toBeDefined();
 					expect((new namespace1.namespace2.TestClass).test).toBe(true);
-				});
 
-				it('when class is undefined and namespace becomes empty, namespace is undefined', function() {
-					soop.undefine('namespace1.namespace2.TestClass');
-					expect(global.namespace1).not.toBeDefined();
+					delete namespace1;
 				});
 			});
 		});
@@ -229,18 +207,16 @@ describe('SOOP', function() {
 		it('overrides super class properties', function() {
 			var test = new TestClass();
 			expect(test.commonFunc()).toBe(2);
-		});
 
-		it('cleanup', function() {
-			soop.undefine('TestClass');
-			soop.undefine('SuperClass');
+			delete TestClass;
+			delete SuperClass;
 		});
 	});
 
 	describe('inheriting a class (advanced)', function() {
 		afterEach(function() {
-			soop.undefine('TestClass');
-			soop.undefine('SuperClass');
+			delete TestClass;
+			delete SuperClass;
 		});
 
 		it('can call super constructor', function() {
@@ -294,7 +270,7 @@ describe('SOOP', function() {
 			});
 			expect(TestClass.prototype.interfaceVar).toBe(42);
 			expect(TestClass.prototype.interfaceFunc).toBe(TestInterface.prototype.interfaceFunc);
-			soop.undefine('TestClass');
+			delete TestClass;
 		});
 
 		it('can implement multiple interfaces', function() {
@@ -319,12 +295,10 @@ describe('SOOP', function() {
 			expect(test.interfaceFunc).toBe(TestInterface.prototype.interfaceFunc);
 			expect(test.interface2Var).toBe(21);
 			expect(test.interface2Func).toBe(TestInterface2.prototype.interface2Func);			
-		});
 
-		it('cleanup', function() {
-			soop.undefine('TestClass');
-			soop.undefine('TestInterface2');
-			soop.undefine('TestInterface');
+			delete TestClass;
+			delete TestInterface2;
+			delete TestInterface;
 		});
 	});
 
@@ -349,9 +323,9 @@ describe('SOOP', function() {
 			expect(TestClass.prototype.interface1Func).toBe(TestInterface1.prototype.interface1Func);
 			expect(TestClass.prototype.interface2Var).toBe(2);
 			expect(TestClass.prototype.interface2Func).toBe(TestInterface2.prototype.interface2Func);
-			soop.undefine('TestClass');
-			soop.undefine('TestInterface2');
-			soop.undefine('TestInterface1');
+			delete TestClass;
+			delete TestInterface2;
+			delete TestInterface1;
 		});
 
 		it('later interfaces override earlier interfaces', function() {
@@ -371,9 +345,9 @@ describe('SOOP', function() {
 			});
 			expect(TestClass.prototype.testVar).toBe(2);
 			expect(TestClass.prototype.testFunc).toBe(TestInterface2.prototype.testFunc);
-			soop.undefine('TestClass');
-			soop.undefine('TestInterface2');
-			soop.undefine('TestInterface1');
+			delete TestClass;
+			delete TestInterface2;
+			delete TestInterface1;
 		});
 
 		it('class properties override interface properties', function() {
@@ -391,8 +365,8 @@ describe('SOOP', function() {
 			var test = new TestClass();
 			expect(test.testVar).toBe(2);
 			expect(test.testFunc()).toBe(2);
-			soop.undefine('TestClass');
-			soop.undefine('TestInterface');
+			delete TestClass;
+			delete TestInterface;
 		});
 
 		it('can call overriden function on interface via super', function() {

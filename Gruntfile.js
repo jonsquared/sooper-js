@@ -14,16 +14,47 @@ module.exports = function(grunt) {
     },
 
     jasmine_node: {
-      all: ['spec/']
+      all: ['spec/'],
+      options: {
+        useHelpers: true
+      }
+    },
+
+    jasmine: {
+      test: {
+        src: 'build/**/*.js',
+        options: {
+          specs: 'spec/*spec.js',
+          helpers: 'spec/*helpers.js'
+        }
+      }
+    },
+
+    file_append: {
+      module: {
+        files: {
+          'build/soop.js': {
+            input: 'src/soop.js',
+            prepend: "soop = function() {",
+            append: "}();"
+          }
+        }
+      }
     },
 
     replace: {
       debug: {
-        src: ['src/soop.js'],
+        src: ['build/soop.js'],
         dest: 'build/soop.js',
         replacements: [{
           from: /\/\/<debug>[\s\S]*?\/\/<\/debug>/gi,
           to: ''
+        }, {
+          from: /module\.exports\s*=/,
+          to: 'return'
+        }, {
+          from: /global/gi,
+          to: 'window'
         }]
       }
     },
@@ -44,9 +75,11 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-jasmine-node');
+  grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-text-replace');
+  grunt.loadNpmTasks('grunt-file-append');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
   grunt.registerTask('test', ['jasmine_node','watch']);
-  grunt.registerTask('default', ['karma:unit', 'replace','uglify']);
+  grunt.registerTask('default', ['jasmine_node','file_append','replace','uglify','jasmine']);
 };

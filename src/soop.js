@@ -89,40 +89,7 @@ function getClassNameFromFullName(fullName) {
 	return fullName.substring(fullName.lastIndexOf('.')+1);
 }
 
-//<debug>
-function undefine(fullName) {
-	var className = getClassNameFromFullName(fullName),
-		namespace = getNamespaceFromFullName(fullName);
-	delete namespace[className];
-	if (namespace !== global && Object.keys(namespace).length == 0)
-		cleanupNamespace(fullName.substring(0,fullName.lastIndexOf('.')));
-}
-
-function cleanupNamespace(name) {
-	var names = name.split('.'),
-		namespaces = [global],
-		namespace = global;
-	for (var i=0; i<names.length; i++) {
-		var nextName = names[i];
-		namespace = namespace[nextName];
-		namespaces.push(namespace);
-	}
-	for (var i=namespaces.length; --i; ) {
-		var parentNamespace = namespaces[i-1],
-			name = names[i-1];
-		namespace = namespaces[i];
-		if (Object.keys(namespace).length == 0)
-			delete parentNamespace[name];
-		else
-			break;
-	}
-}
-//</debug>
-
 module.exports = {
 	define: define,
-	//<debug>
-	undefine: undefine,
-	//</debug>
 	version: '1.1.0'
 }
