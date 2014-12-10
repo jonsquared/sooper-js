@@ -8,7 +8,7 @@ describe('SOOP', function() {
 		expect(soop.hasOwnProperty('define')).toBe(true);
 		expect(soop.hasOwnProperty('undefine')).toBe(true);
 		expect(soop.hasOwnProperty('version')).toBe(true);
-		expect(soop.version).toBe("1.0.0");
+		expect(soop.version).toBe("1.1.0");
 	});
 
 	describe('defining a class', function() {

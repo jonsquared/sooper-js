@@ -3,6 +3,18 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
+    karma: {
+      options: {
+        configFile: 'tests/karma.conf.js'
+      },
+      unit: {
+        singleRun: true
+      },
+      dev: {
+        singleRun: false
+      }
+    },
+
     replace: {
       debug: {
         src: ['src/soop.js'],
@@ -28,8 +40,10 @@ module.exports = function(grunt) {
     }
   });
 
+  grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-text-replace');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  grunt.registerTask('default', ['replace','uglify']);
+  grunt.registerTask('test', ['karma:dev']);
+  grunt.registerTask('default', ['karma:unit', 'replace','uglify']);
 };
