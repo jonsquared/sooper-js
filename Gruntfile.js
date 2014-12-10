@@ -3,16 +3,18 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
-    karma: {
-      options: {
-        configFile: 'tests/karma.conf.js'
-      },
-      unit: {
-        singleRun: true
-      },
-      dev: {
-        singleRun: false
+    watch: {
+      scripts: {
+        files: ['**/*.js'],
+        tasks: ['jasmine_node'],
+        options: {
+          interrupt: true
+        }
       }
+    },
+
+    jasmine_node: {
+      all: ['spec/']
     },
 
     replace: {
@@ -40,10 +42,11 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-jasmine-node');
   grunt.loadNpmTasks('grunt-text-replace');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  grunt.registerTask('test', ['karma:dev']);
+  grunt.registerTask('test', ['jasmine_node','watch']);
   grunt.registerTask('default', ['karma:unit', 'replace','uglify']);
 };
