@@ -75,26 +75,18 @@ Notes:
 	test.func1(); //2
 	test.func2(); //4
 
-###Testing
+###Testing and Building
 
-Tests are written as jasmine tests and configured for the karma test runner.
-To run the tests, navigate to the tests directory and run:
-
-	karma start karma.config.js --single-run
-
-###Building
-
-The build is configured for Grunt. The first time building, run the following steps on the command line:
-
-To be able to run grunt on the command line:
+This project is configured for Grunt. The first time testing or building, run the following steps on the command line at the root of the project:
 
 	npm install -g grunt-cli
-
-To install all required grunt plugins by this project:
-
 	npm install
 
-To build soop, run:
+To run the tests (karma using PhantomJS set to autoWatch), run:
+
+	grunt test
+
+To build soop.js, run:
 
 	grunt
 
