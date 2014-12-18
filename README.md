@@ -1,7 +1,7 @@
 SOOP
 ====
 
-Simple Object Oriented Programming framework for JavaScript. It's light-weight and efficient.
+Simple inheritance and implementation framework for JavaScript.
 
 This framework requires *ECMAScript 5*
 
