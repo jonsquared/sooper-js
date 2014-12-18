@@ -3,7 +3,21 @@ SOOP
 
 Simple inheritance and implementation framework for JavaScript.
 
-This framework requires *ECMAScript 5*
+Why use this framework? There were several reasons this framework was created instead of simply using one of the many other JavaScript inheritance frameworks:
+* Define an object oriented class hierarchy in JavaScript while maintaining efficiency. It will not introduce any unnecessary closure, which allows class instances to be created faster and to use less memory.
+* Classes maintain compatability with native JavaScript.
+    * use the *new* keyword to create instances
+    * compatible with *instanceof*
+    * compatible with ECMAScript 6 classes making the transition to native classes easier
+* Does not pollute native classes (e.g. putting helper methods on Object.prototype)
+
+**Requirements:**
+* *ECMAScript 5* features
+
+**Features:**
+* class definition, inheritance, and implementation (mixin style)
+* automatic namespace generation
+* quick access to super constructor and super functions
 
 Usage
 -----
