@@ -1,5 +1,5 @@
 {
-  "name": "soop",
+  "name": "sooper",
   "version": "1.1.0",
   "description": "Simple Object Oriented Programming framework for JavaScript.",
   "keywords": [
@@ -14,14 +14,14 @@
     "framework"
   ],
   "bugs": {
-    "url": "https://github.com/jonsquared/soop-js/issues"
+    "url": "https://github.com/jonsquared/sooper-js/issues"
   },
   "license": "MIT",
   "author": "Jon E. John <jon.e.john@gmail.com>",
-  "main": "src/soop.js",
+  "main": "src/sooper.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jonsquared/soop-js"
+    "url": "https://github.com/jonsquared/sooper-js"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

@@ -1,4 +1,4 @@
-SOOP
+sooper
 ====
 
 Simple inheritance and implementation framework for JavaScript.
@@ -27,7 +27,7 @@ Notes:
 
 <!--end of the list -->
 
-	soop.define('app.namespace.TestClass', {
+	sooper.define('app.namespace.TestClass', {
 		value: 42,
 		constructor: function() {},
 		getValue: function() { return this.value; }
@@ -38,13 +38,13 @@ Notes:
 
 ###Inheriting a super class
 
-	soop.define('SuperClass', {
+	sooper.define('SuperClass', {
 		value: 0,
 		constructor: function(value) { this.value = value; },
 		func: function() { return 1; }
 	});
 
-	soop.define('TestClass', {
+	sooper.define('TestClass', {
 		inherits: SuperClass,
 		constructor: function(value) {
 			this.super(value);
@@ -61,17 +61,17 @@ Notes:
 
 ###Implementing interfaces
 
-	soop.define('Interface1', {
+	sooper.define('Interface1', {
 		constructor: function() {},
 		func1: function() { return 1; }
 	});
 
-	soop.define('Interface2', {
+	sooper.define('Interface2', {
 		constructor: function() {},
 		func2: function() { return 2; }
 	});
 
-	soop.define('TestClass', {
+	sooper.define('TestClass', {
 		implements: [Interface1,Interface2],
 		constructor: function() {},
 		func1: function me() {
@@ -97,7 +97,7 @@ To run the tests (karma using PhantomJS set to autoWatch), run:
 
 	grunt test
 
-To build soop.js, run:
+To build sooper.js, run:
 
 	grunt
 
