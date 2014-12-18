@@ -4,8 +4,13 @@
   "description": "Simple Object Oriented Programming framework for JavaScript.",
   "keywords": [
     "simple",
+    "lightweight",
     "object",
+    "oop",
+    "class",
     "inheritance",
+    "inherit",
+    "implement",
     "framework"
   ],
   "bugs": {
