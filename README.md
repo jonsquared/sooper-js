@@ -6,7 +6,7 @@ sooper
 **Requirements:**
 * *ECMAScript 5* features
 
->Why use an inheritance framework at all? ECMAScript 6 will have native class support in 2015, these frameworks are useless!
+>Why use an inheritance framework at all? ECMAScript 6 will have native class support in 2015, these frameworks will soon be useless!
 
 As of now, the proposed class implementation in ECMAScript 6 does not provide a way to implement interfaces or mixins. It only allows class functions, not class properties! They have to be put on the instances via the constructor (which uses more memory for every instance) or added to the class after definition. Also, several of the features in ECMAScript 5+ take several lines of code to implement when a framework could do it in less (e.g. adding properties with non-default descriptors)
 
