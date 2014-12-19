@@ -1,7 +1,7 @@
 sooper
 ====
 
-**S**imple **O**bject **O**riented **P**rogramming inheritance and implementation framework for JavaScript.
+**S**imple **O**bject **O**riented **P**rogramming inheritance and implementation framework for JavaScript (unlike some of the **E**xtra **R**idiculous complex frameworks out there).
 
 **Requirements:**
 * *ECMAScript 5* features
