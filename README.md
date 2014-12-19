@@ -15,7 +15,7 @@ sooper
 >Why use this framework?
 
 To help answer that, here is a list of requirements that initially drove the creation of sooper:
-* Keep it *Simple* and *efficient*
+* Keep it *simple* and *efficient*
 * Provide a way to define a class that can inherit a super class and implement many interfaces (ala mixin).
 * Do not introduce any unnecessary closure, which allows class instances to be created faster and use less memory.
 * Make it node and browser compatible (based off of the ECMAScript 5 standard).
