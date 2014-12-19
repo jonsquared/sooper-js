@@ -62,7 +62,7 @@ test.getValue(); //42
 
 **If you really need to have private variables:**
 
-WARNING: Doing this will cause slighly more memory usage per instance of the class, but if that doesn't matter...
+*WARNING*: Doing this will cause slightly more memory usage per instance of the class, but if that doesn't matter...
 
 Simply wrap the class definition in a function (module pattern) like this:
 
