@@ -48,77 +48,103 @@ Notes:
 
 <!--end of the list -->
 
-	sooper.define('app.namespace.TestClass', {
-		value: 42,
-		constructor: function() {},
-		getValue: function() { return this.value; }
-	});
+```js
+sooper.define('app.namespace.TestClass', {
+	value: 42,
+	constructor: function() {},
+	getValue: function() { return this.value; }
+});
 
-	var test = new app.namespace.TestClass();
-	test.getValue(); //42
+var test = new app.namespace.TestClass();
+test.getValue(); //42
+```
+
+**If you really need to have private variables:**
+
+WARNING: Doing this will cause slighly more memory usage per instance of the class, but if that doesn't matter...
+
+Simply wrap the class definition in a function (module pattern) like this:
+
+```js
+function(){
+
+var privateValue = 42;
+
+sooper.define('TestClass', {
+	constructor: function() {},
+	getValue: function() { return privateValue; }
+});
+
+}();
+```
+
 
 ###Inheriting a super class
 
-	sooper.define('SuperClass', {
-		value: 0,
-		constructor: function(value) { this.value = value; },
-		func: function() { return 1; }
-	});
+```js
+sooper.define('SuperClass', {
+	value: 0,
+	constructor: function(value) { this.value = value; },
+	func: function() { return 1; }
+});
 
-	sooper.define('TestClass', {
-		inherits: SuperClass,
-		constructor: function(value) {
-			this.super(value);
-			this.value++;
-		},
-		func: function me() {
-			return me.super.call(this)+1;
-		}
-	});
+sooper.define('TestClass', {
+	inherits: SuperClass,
+	constructor: function(value) {
+		this.super(value);
+		this.value++;
+	},
+	func: function me() {
+		return me.super.call(this)+1;
+	}
+});
 
-	var test = new TestClass(41);
-	test.value; //42
-	test.func(); //2
+var test = new TestClass(41);
+test.value; //42
+test.func(); //2
+```
 
 ###Implementing interfaces
 
-	sooper.define('Interface1', {
-		constructor: function() {},
-		func1: function() { return 1; }
-	});
+```js
+sooper.define('Interface1', {
+	constructor: function() {},
+	func1: function() { return 1; }
+});
 
-	sooper.define('Interface2', {
-		constructor: function() {},
-		func2: function() { return 2; }
-	});
+sooper.define('Interface2', {
+	constructor: function() {},
+	func2: function() { return 2; }
+});
 
-	sooper.define('TestClass', {
-		implements: [Interface1,Interface2],
-		constructor: function() {},
-		func1: function me() {
-			return me.super.call(this)+1;
-		},
-		func2: function me() {
-			return me.super.call(this)+2;
-		}
-	});
+sooper.define('TestClass', {
+	implements: [Interface1,Interface2],
+	constructor: function() {},
+	func1: function me() {
+		return me.super.call(this)+1;
+	},
+	func2: function me() {
+		return me.super.call(this)+2;
+	}
+});
 
-	var test = new TestClass();
-	test.func1(); //2
-	test.func2(); //4
+var test = new TestClass();
+test.func1(); //2
+test.func2(); //4
+```
 
-###Testing and Building
+###Testing and Building (For development on this project)
 
 This project is configured for Grunt. The first time testing or building, run the following steps on the command line at the root of the project:
 
 	npm install -g grunt-cli
 	npm install
 
-To run the tests (karma using PhantomJS set to autoWatch), run:
+To run the tests (jasmine using PhantomJS set to autoWatch), run:
 
 	grunt test
 
 To build sooper.js, run:
 
-	grunt
+	grunt build
 
