@@ -1,12 +1,16 @@
 {
   "name": "sooper",
-  "version": "1.1.0",
-  "description": "Simple Object Oriented Programming framework for JavaScript.",
+  "version": "2.0.0",
+  "description": "Simple Object Oriented Programming inheritance and implementation framework for JavaScript.",
   "keywords": [
+    "super",
     "simple",
+    "efficient",
     "lightweight",
     "object",
+    "oriented",
     "oop",
+    "namespace",
     "class",
     "inheritance",
     "inherit",
