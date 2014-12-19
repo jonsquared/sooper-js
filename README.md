@@ -27,6 +27,7 @@ To help answer that, here is a list of requirements that initially drove the cre
 * interface implementation (mixin style) via implements property
 * automatic namespace generation
 * quick access to super constructor and super functions
+* builds to a browser friendly version (see [releases](https://github.com/jonsquared/sooper-js/releases) for minified version)
 
 >But those features don't include something the other frameworks have.  I wish sooper had those features!
 
