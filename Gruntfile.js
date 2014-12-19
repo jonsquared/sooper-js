@@ -33,9 +33,9 @@ module.exports = function(grunt) {
     file_append: {
       module: {
         files: {
-          'build/soop.js': {
-            input: 'src/soop.js',
-            prepend: "soop = function() {",
+          'build/sooper.js': {
+            input: 'src/sooper.js',
+            prepend: "sooper = function() {",
             append: "}();"
           }
         }
@@ -44,8 +44,8 @@ module.exports = function(grunt) {
 
     replace: {
       debug: {
-        src: ['build/soop.js'],
-        dest: 'build/soop.js',
+        src: ['build/sooper.js'],
+        dest: 'build/sooper.js',
         replacements: [{
           from: /\/\/<debug>[\s\S]*?\/\/<\/debug>/gi,
           to: ''
@@ -67,7 +67,7 @@ module.exports = function(grunt) {
       },
       build: {
         files: {
-          'build/soop.js': ['build/soop.js']
+          'build/sooper.js': ['build/sooper.js']
         }
       }
     }

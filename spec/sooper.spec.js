@@ -1,24 +1,24 @@
-describe('SOOP', function() {
+describe('sooper', function() {
 
 	it('exists', function() {
-		expect(soop).toBeDefined();
+		expect(sooper).toBeDefined();
 	});
 
 	it('has correct properties', function() {
-		expect(Object.getOwnPropertyNames(soop).length).toBe(2);
-		expect(soop.hasOwnProperty('define')).toBe(true);
-		expect(soop.hasOwnProperty('version')).toBe(true);
-		expect(soop.version).toBe("1.1.0");
+		expect(Object.getOwnPropertyNames(sooper).length).toBe(2);
+		expect(sooper.hasOwnProperty('define')).toBe(true);
+		expect(sooper.hasOwnProperty('version')).toBe(true);
+		expect(sooper.version).toBe("1.1.0");
 	});
 
 	describe('defining a class', function() {
 		describe('with no members', function() {
 			it('can be defined', function() {
 				function createClassWithoutConstructor() {
-					soop.define('TestClass');
+					sooper.define('TestClass');
 				}
 				function createClassWithConstructor() {
-					soop.define('TestClass', {
+					sooper.define('TestClass', {
 						constructor: function(){}
 					});					
 				}
@@ -65,7 +65,7 @@ describe('SOOP', function() {
 					get: accessorGetter,
 					set: accessorSetter
 				});
-				soop.define('TestClass', testClassConfig);
+				sooper.define('TestClass', testClassConfig);
 
 				expect(TestClass).toBeDefined();
 			});
@@ -121,12 +121,12 @@ describe('SOOP', function() {
 		describe('with a namespace', function() {
 			describe('single level', function(){
 				it('is created', function() {
-					soop.define('namespace.TestClass1', {
+					sooper.define('namespace.TestClass1', {
 						constructor: function() {
 							this.test = true;
 						}
 					});
-					soop.define('namespace.TestClass2', {
+					sooper.define('namespace.TestClass2', {
 						constructor: function() {
 							this.test = true;
 						}
@@ -144,7 +144,7 @@ describe('SOOP', function() {
 
 			describe('multiple levels', function() {
 				it('is created', function() {
-					soop.define('namespace1.namespace2.TestClass', {
+					sooper.define('namespace1.namespace2.TestClass', {
 						constructor: function() {
 							this.test = true;
 						}
@@ -163,7 +163,7 @@ describe('SOOP', function() {
 
 	describe('inheriting a class (basic)', function() {
 		it('can inherit', function() {
-			soop.define('SuperClass', {
+			sooper.define('SuperClass', {
 				superVar: 42,
 				constructor: function(value) {
 					if(arguments.length)
@@ -172,7 +172,7 @@ describe('SOOP', function() {
 				superFunc: function() { return this.superVar; },
 				commonFunc: function() { return 1; }
 			});
-			soop.define('TestClass', {
+			sooper.define('TestClass', {
 				inherits: SuperClass,
 				subVar: 21,
 				constructor: function(value) {
@@ -220,12 +220,12 @@ describe('SOOP', function() {
 		});
 
 		it('can call super constructor', function() {
-			soop.define('SuperClass', {
+			sooper.define('SuperClass', {
 				constructor: function(value) {
 					this.testVar1 = value;
 				}
 			});
-			soop.define('TestClass', {
+			sooper.define('TestClass', {
 				inherits: SuperClass,
 				constructor: function(value) {
 					this.super(value);
@@ -238,14 +238,14 @@ describe('SOOP', function() {
 		});
 
 		it('can call super function on super class', function() {
-			soop.define('SuperClass', {
+			sooper.define('SuperClass', {
 				testVar: 1,
 				constructor: function() {},
 				testFunc: function(value) {
 					return this.testVar+value;
 				}
 			});
-			soop.define('TestClass', {
+			sooper.define('TestClass', {
 				inherits: SuperClass,
 				constructor: function() {},
 				testFunc: function me(value) {
@@ -259,12 +259,12 @@ describe('SOOP', function() {
 
 	describe('implementing interfaces (basic)', function() {
 		it('can implement a single interface', function() {
-			soop.define('TestInterface', {
+			sooper.define('TestInterface', {
 				constructor:function(){},
 				interfaceVar: 42,
 				interfaceFunc: function(){}
 			});
-			soop.define('TestClass', {
+			sooper.define('TestClass', {
 				implements: TestInterface,
 				constructor: function() {}
 			});
@@ -274,12 +274,12 @@ describe('SOOP', function() {
 		});
 
 		it('can implement multiple interfaces', function() {
-			soop.define('TestInterface2', {
+			sooper.define('TestInterface2', {
 				constructor:function(){},
 				interface2Var: 21,
 				interface2Func: function(){}
 			});
-			soop.define('TestClass', {
+			sooper.define('TestClass', {
 				implements: [TestInterface,TestInterface2],
 				constructor: function() {}
 			});
@@ -304,18 +304,18 @@ describe('SOOP', function() {
 
 	describe('implementing interfaces (advanced)', function() {
 		it('can implement an interface that implements an interface', function() {
-			soop.define('TestInterface1', {
+			sooper.define('TestInterface1', {
 				constructor:function(){},
 				interface1Var: 1,
 				interface1Func: function(){}
 			});
-			soop.define('TestInterface2', {
+			sooper.define('TestInterface2', {
 				implements: TestInterface1,
 				constructor:function(){},
 				interface2Var: 2,
 				interface2Func: function(){}
 			});
-			soop.define('TestClass', {
+			sooper.define('TestClass', {
 				implements: TestInterface2,
 				constructor: function() {}
 			});
@@ -329,17 +329,17 @@ describe('SOOP', function() {
 		});
 
 		it('later interfaces override earlier interfaces', function() {
-			soop.define('TestInterface1', {
+			sooper.define('TestInterface1', {
 				constructor:function(){},
 				testVar: 1,
 				testFunc: function(){ return 1; }
 			});
-			soop.define('TestInterface2', {
+			sooper.define('TestInterface2', {
 				constructor:function(){},
 				testVar: 2,
 				testFunc: function(){ return 2; }
 			});
-			soop.define('TestClass', {
+			sooper.define('TestClass', {
 				implements: [TestInterface1,TestInterface2],
 				constructor: function() {}
 			});
@@ -351,12 +351,12 @@ describe('SOOP', function() {
 		});
 
 		it('class properties override interface properties', function() {
-			soop.define('TestInterface', {
+			sooper.define('TestInterface', {
 				constructor:function(){},
 				testVar: 1,
 				testFunc: function(){return 1;}
 			});
-			soop.define('TestClass', {
+			sooper.define('TestClass', {
 				implements: TestInterface,
 				testVar: 2,
 				testFunc: function(){return 2;},
@@ -370,14 +370,14 @@ describe('SOOP', function() {
 		});
 
 		it('can call overriden function on interface via super', function() {
-			soop.define('TestInterface', {
+			sooper.define('TestInterface', {
 				testVar: 1,
 				constructor: function() {},
 				testFunc: function(value) {
 					return this.testVar+value;
 				}
 			});
-			soop.define('TestClass', {
+			sooper.define('TestClass', {
 				implements: TestInterface,
 				constructor: function() {},
 				testFunc: function me(value) {
