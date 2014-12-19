@@ -40,7 +40,7 @@ Usage
 ###Defining a class
 Notes:
 * Every class must at least define a constructor
-* A class may have a namespace 0 or more levels deep ('.' separated)
+* A class may have a namespace 0 or more levels deep ('.' delimited)
 * Property descriptors (configurable, enumerable, writable, etc...) will be preserved
 * Reserved properties:
 	* constructor
