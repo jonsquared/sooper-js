@@ -3,18 +3,24 @@ sooper
 
 **S**imple **O**bject **O**riented **P**rogramming inheritance and implementation framework for JavaScript.
 
-Why use this framework? There were several reasons this framework was created instead of simply using one of the many other JavaScript inheritance frameworks:
-* Define an object oriented class hierarchy in JavaScript while maintaining efficiency. It will not introduce any unnecessary closure, which allows class instances to be created faster and to use less memory.
-* Browser friendly (any version supporting ECMAScript 5 standard)
-* Does not pollute native classes (e.g. putting helper methods on Object.prototype)
-
 **Requirements:**
 * *ECMAScript 5* features
 
+Why use this framework? To answer that, here is a list of requirements that initially drove the creation of sooper:
+* Keep it *Simple* and *efficient*
+* Provide a way to define a class that can inherit a super class and implement many interfaces (ala mixin).
+* Do not introduce any unnecessary closure, which allows class instances to be created faster and use less memory.
+* Make it node and browser compatible (based off of the ECMAScript 5 standard).
+* Do not pollute native class prototypes (e.g. do not put any helper methods on Object.prototype)
+
+
 **Features:**
-* class definition, inheritance, and implementation (mixin style)
+* class definition via sooper.define
+* class inheritance via inherits property
+* interface implementation (mixin style) via implements property
 * automatic namespace generation
 * quick access to super constructor and super functions
+
 
 Usage
 -----
