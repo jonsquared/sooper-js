@@ -6,21 +6,30 @@ sooper
 **Requirements:**
 * *ECMAScript 5* features
 
-Why use this framework? To answer that, here is a list of requirements that initially drove the creation of sooper:
+>Why use an inheritance framework at all? ECMAScript 6 will have native class support in 2015, these frameworks are useless!
+
+As of now, the proposed class implementation in ECMAScript 6 does not provide a way to implement interfaces or mixins. It only allows class functions, not class properties! They have to be put on the instances via the constructor (which uses more memory for every instance) or added to the class after definition. Also, several of the features in ECMAScript 5+ take several lines of code to implement when a framework could do it in less (e.g. adding properties with non-default descriptors)
+
+>Why use this framework?
+
+To help answer that, here is a list of requirements that initially drove the creation of sooper:
 * Keep it *Simple* and *efficient*
 * Provide a way to define a class that can inherit a super class and implement many interfaces (ala mixin).
 * Do not introduce any unnecessary closure, which allows class instances to be created faster and use less memory.
 * Make it node and browser compatible (based off of the ECMAScript 5 standard).
 * Do not pollute native class prototypes (e.g. do not put any helper methods on Object.prototype)
 
-
-**Features:**
+**Current features:**
 * class definition via sooper.define
 * class inheritance via inherits property
 * interface implementation (mixin style) via implements property
 * automatic namespace generation
 * quick access to super constructor and super functions
 
+>But those features don't include something the other frameworks have.  I wish sooper had those features!
+
+**I will add any feature as long as it has 2 important properties: keeps sooper simple and makes class creation easier than native JavaScript.**
+There are a LOT of javascript inheritance frameworks out there.  Some of the features in them are not necessary (because native JavaScript is just as easy), some are complex and better suited for complex frameworks (which sooper is not meant to be), and some are definitely useful (makes it much easier than native JavaScript).  I would like to add any features that fall under that last category, so if anyone has any particular requests, add them to the github issues for this project.
 
 Usage
 -----
