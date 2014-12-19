@@ -40,7 +40,11 @@ Usage
 Notes:
 * Every class must at least define a constructor
 * A class may have a namespace 0 or more levels deep ('.' separated)
-* Property descriptors will be preserved (configurable, enumerable, writable, etc...)
+* Property descriptors (configurable, enumerable, writable, etc...) will be preserved
+* Reserved properties:
+	* constructor
+	* inherits
+	* implements
 
 <!--end of the list -->
 
