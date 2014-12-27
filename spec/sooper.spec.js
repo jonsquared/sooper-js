@@ -20,12 +20,12 @@ describe('sooper', function() {
 				function createClassWithConstructor() {
 					sooper.define('TestClass', {
 						constructor: function(){}
-					});					
+					});
 				}
 				expect(createClassWithoutConstructor).toThrow();
 				expect(createClassWithConstructor).not.toThrow();
 				expect(TestClass).toBeDefined();
-				expect(TestClass instanceof Function).toBe(true);			
+				expect(TestClass instanceof Function).toBe(true);
 			});
 
 			it('can be instantiated', function() {
@@ -157,6 +157,27 @@ describe('sooper', function() {
 
 					delete namespace1;
 				});
+			});
+		});
+
+		describe('without a namespace', function() {
+			function createWithoutNamespace () {
+				return sooper.define({
+					constructor: function() {},
+					value: 42
+				});
+			}
+			it('does not throw an error', function() {
+				expect(createWithoutNamespace).not.toThrow();
+			});
+			it('returns the class', function() {
+				var TestClass = createWithoutNamespace();
+				expect(TestClass).toBeDefined();
+				expect(TestClass instanceof Function).toBe(true);
+			});
+			it('can be instantiated', function() {
+				var t = new (createWithoutNamespace())();
+				expect(t.value).toBe(42);
 			});
 		});
 	});
@@ -294,7 +315,7 @@ describe('sooper', function() {
 			expect(test.interfaceVar).toBe(42);
 			expect(test.interfaceFunc).toBe(TestInterface.prototype.interfaceFunc);
 			expect(test.interface2Var).toBe(21);
-			expect(test.interface2Func).toBe(TestInterface2.prototype.interface2Func);			
+			expect(test.interface2Func).toBe(TestInterface2.prototype.interface2Func);
 
 			delete TestClass;
 			delete TestInterface2;

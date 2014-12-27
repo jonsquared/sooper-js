@@ -4,16 +4,21 @@ var o = Object,
 	getOwnPropertyNames = o.getOwnPropertyNames,
 	getOwnPropertyDescriptor = o.getOwnPropertyDescriptor;
 
-function define(fullName, config) {
+function define() {
+	var args = arguments,
+		config = args[1] || args[0],
+		fullName = args.length > 1 && args[0];
 	//<debug>
 	var c = config.constructor;
 	if (!c || typeof(c) != 'function')
 		throw new Error('A constructor function must be defined.');
 	//</debug>
-	setupClassNamespace(fullName, config);
+	if (fullName)
+		setupClassNamespace(fullName, config);
 	setupSuperClass(config);
     setupClassInterfaces(config);
 	setupClassProperties(config);
+	return config.constructor;
 }
 
 function getNamespaceFromFullName(fullName) {

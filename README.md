@@ -40,7 +40,7 @@ Usage
 ###Defining a class
 Notes:
 * Every class must at least define a constructor
-* A class may have a namespace 0 or more levels deep ('.' delimited)
+* A class may have an optional namespace 0 or more levels deep ('.' delimited)
 * Property descriptors (configurable, enumerable, writable, etc...) will be preserved
 * Reserved properties:
 	* constructor
@@ -49,6 +49,7 @@ Notes:
 
 <!--end of the list -->
 
+####With auto-generated namespace
 ```js
 sooper.define('app.namespace.TestClass', {
 	value: 42,
@@ -60,25 +61,19 @@ var test = new app.namespace.TestClass();
 test.getValue(); //42
 ```
 
-**If you really need to have private variables:**
-
-*WARNING*: Doing this will cause slightly more memory usage per instance of the class, but if that doesn't matter...
-
-Simply wrap the class definition in a function (module pattern) like this:
+####As a module
 
 ```js
-function(){
-
-var privateValue = 42;
-
-sooper.define('TestClass', {
-	constructor: function() {},
-	getValue: function() { return privateValue; }
-});
-
+var TestClass = (function(){
+	return sooper.define({
+		constructor: function() {},
+		getValue: function() { return privateValue; }
+	});
 }();
-```
 
+var test = new TestClass();
+test.getValue(); //42
+```
 
 ###Inheriting a super class
 
