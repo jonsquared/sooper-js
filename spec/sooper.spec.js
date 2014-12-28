@@ -12,20 +12,15 @@ describe('sooper', function() {
 	});
 
 	describe('defining a class', function() {
-		describe('with no members', function() {
+		describe('with nothing', function() {
 			it('can be defined', function() {
 				function createClassWithoutConstructor() {
-					sooper.define('TestClass');
+					sooper.define('TestClass', {});
 				}
-				function createClassWithConstructor() {
-					sooper.define('TestClass', {
-						constructor: function(){}
-					});
-				}
-				expect(createClassWithoutConstructor).toThrow();
-				expect(createClassWithConstructor).not.toThrow();
+				expect(createClassWithoutConstructor).not.toThrow();
 				expect(TestClass).toBeDefined();
 				expect(TestClass instanceof Function).toBe(true);
+				expect(TestClass.prototype.constructor).not.toBe(Object);
 			});
 
 			it('can be instantiated', function() {
@@ -34,6 +29,45 @@ describe('sooper', function() {
 				expect(test instanceof TestClass).toBe(true);
 				expect(Object.getOwnPropertyNames(test).length).toBe(0);
 				expect(Object.keys(test).length).toBe(0);
+
+				delete TestClass;
+			});
+
+			it('creates unique constructors', function() {
+				sooper.define('TestClass1', {
+					value: 1
+				});
+				sooper.define('TestClass2', {
+					value: 2
+				});
+				var t1 = new TestClass1(),
+					t2 = new TestClass2();
+				expect(TestClass1.prototype.constructor).not.toBe(TestClass2.prototype.constructor);
+				expect(t1.value).toBe(1);
+				expect(t2.value).toBe(2);
+
+				delete TestClass1;
+				delete TestClass2;
+			});
+		});
+		describe('with only a constructor', function() {
+			it('can be defined', function() {
+				function createClassWithConstructor() {
+					sooper.define('TestClass', {
+						constructor: function(){
+							this.value = 42;
+						}
+					});
+				}
+				expect(createClassWithConstructor).not.toThrow();
+				expect(TestClass).toBeDefined();
+			});
+
+			it('can be instantiated', function() {
+				var test = new TestClass();
+				expect(Object.getOwnPropertyNames(test).length).toBe(1);
+				expect(Object.keys(test).length).toBe(1);
+				expect(test.value).toBe(42);
 
 				delete TestClass;
 			});

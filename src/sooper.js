@@ -10,11 +10,8 @@ function define() {
 	var args = arguments,
 		config = args[1] || args[0],
 		fullName = args.length > 1 && args[0];
-	//<debug>
-	var c = config.constructor;
-	if (!c || typeof(c) != 'function')
-		throw new Error('A constructor function must be defined.');
-	//</debug>
+	if (config.constructor === Object)
+		config.constructor = (function(){});
 	if (fullName)
 		setupClassNamespace(fullName, config);
 	setupSuperClass(config);
