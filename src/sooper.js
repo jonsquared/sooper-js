@@ -1,3 +1,5 @@
+"use strict";
+
 //These vars are purely for better minification
 var o = Object,
 	defineProperty = o.defineProperty,
