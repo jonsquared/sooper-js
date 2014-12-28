@@ -46,6 +46,7 @@ Notes:
 	* constructor
 	* inherits
 	* implements
+	* super
 
 <!--end of the list -->
 
