@@ -39,7 +39,7 @@ Usage
 
 ###Defining a class
 Notes:
-* Every class must at least define a constructor
+* A constructor is optional
 * A class may have an optional namespace 0 or more levels deep ('.' delimited)
 * Property descriptors (configurable, enumerable, writable, etc...) will be preserved
 * Reserved properties:
@@ -53,7 +53,6 @@ Notes:
 ```js
 sooper.define('app.namespace.TestClass', {
 	value: 42,
-	constructor: function() {},
 	getValue: function() { return this.value; }
 });
 
@@ -66,8 +65,8 @@ test.getValue(); //42
 ```js
 var TestClass = (function(){
 	return sooper.define({
-		constructor: function() {},
-		getValue: function() { return privateValue; }
+		value: 42,
+		getValue: function() { return this.value; }
 	});
 }();
 
@@ -104,18 +103,15 @@ test.func(); //2
 
 ```js
 sooper.define('Interface1', {
-	constructor: function() {},
 	func1: function() { return 1; }
 });
 
 sooper.define('Interface2', {
-	constructor: function() {},
 	func2: function() { return 2; }
 });
 
 sooper.define('TestClass', {
 	implements: [Interface1,Interface2],
-	constructor: function() {},
 	func1: function me() {
 		return me.super.call(this)+1;
 	},
