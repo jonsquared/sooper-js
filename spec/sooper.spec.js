@@ -315,7 +315,6 @@ describe('sooper', function() {
 	describe('implementing interfaces (basic)', function() {
 		it('can implement a single interface', function() {
 			sooper.define('TestInterface', {
-				constructor:function(){},
 				interfaceVar: 42,
 				interfaceFunc: function(){}
 			});
@@ -330,13 +329,11 @@ describe('sooper', function() {
 
 		it('can implement multiple interfaces', function() {
 			sooper.define('TestInterface2', {
-				constructor:function(){},
 				interface2Var: 21,
 				interface2Func: function(){}
 			});
 			sooper.define('TestClass', {
-				implements: [TestInterface,TestInterface2],
-				constructor: function() {}
+				implements: [TestInterface,TestInterface2]
 			});
 			expect(TestClass.prototype.interfaceVar).toBe(42);
 			expect(TestClass.prototype.interfaceFunc).toBe(TestInterface.prototype.interfaceFunc);
@@ -360,19 +357,16 @@ describe('sooper', function() {
 	describe('implementing interfaces (advanced)', function() {
 		it('can implement an interface that implements an interface', function() {
 			sooper.define('TestInterface1', {
-				constructor:function(){},
 				interface1Var: 1,
 				interface1Func: function(){}
 			});
 			sooper.define('TestInterface2', {
 				implements: TestInterface1,
-				constructor:function(){},
 				interface2Var: 2,
 				interface2Func: function(){}
 			});
 			sooper.define('TestClass', {
-				implements: TestInterface2,
-				constructor: function() {}
+				implements: TestInterface2
 			});
 			expect(TestClass.prototype.interface1Var).toBe(1);
 			expect(TestClass.prototype.interface1Func).toBe(TestInterface1.prototype.interface1Func);
@@ -385,18 +379,15 @@ describe('sooper', function() {
 
 		it('later interfaces override earlier interfaces', function() {
 			sooper.define('TestInterface1', {
-				constructor:function(){},
 				testVar: 1,
 				testFunc: function(){ return 1; }
 			});
 			sooper.define('TestInterface2', {
-				constructor:function(){},
 				testVar: 2,
 				testFunc: function(){ return 2; }
 			});
 			sooper.define('TestClass', {
-				implements: [TestInterface1,TestInterface2],
-				constructor: function() {}
+				implements: [TestInterface1,TestInterface2]
 			});
 			expect(TestClass.prototype.testVar).toBe(2);
 			expect(TestClass.prototype.testFunc).toBe(TestInterface2.prototype.testFunc);
@@ -407,15 +398,13 @@ describe('sooper', function() {
 
 		it('class properties override interface properties', function() {
 			sooper.define('TestInterface', {
-				constructor:function(){},
 				testVar: 1,
 				testFunc: function(){return 1;}
 			});
 			sooper.define('TestClass', {
 				implements: TestInterface,
 				testVar: 2,
-				testFunc: function(){return 2;},
-				constructor: function() {}
+				testFunc: function(){return 2;}
 			});
 			var test = new TestClass();
 			expect(test.testVar).toBe(2);
@@ -427,14 +416,12 @@ describe('sooper', function() {
 		it('can call overriden function on interface via super', function() {
 			sooper.define('TestInterface', {
 				testVar: 1,
-				constructor: function() {},
 				testFunc: function(value) {
 					return this.testVar+value;
 				}
 			});
 			sooper.define('TestClass', {
 				implements: TestInterface,
-				constructor: function() {},
 				testFunc: function me(value) {
 					return me.super.call(this,value) + 1;
 				}
