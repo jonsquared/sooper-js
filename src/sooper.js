@@ -14,13 +14,26 @@ function define() {
 	if (constructor === Object)
 		constructor = (function(){});
 	if (fullName)
+		//<replaceTarget>
 		setupClassNamespace(fullName, constructor);
+		//</replaceTarget>
+
+	//<replaceTarget>
 	setupSuperClass(constructor, config);
+	//</replaceTarget>
+
+	//<replaceTarget>
     setupClassInterfaces(constructor, config);
+	//</replaceTarget>
+
+	//<replaceTarget>
 	setupClassProperties(constructor, config);
+	//</replaceTarget>
+
 	return constructor;
 }
 
+//<replaceSource>
 function setupClassNamespace(fullName, constructor) {
 	var names = fullName.split('.'),
 		className = names.pop(),
@@ -34,13 +47,17 @@ function setupClassNamespace(fullName, constructor) {
 	//</debug>
 	namespace[className] = constructor;
 }
+//</replaceSource>
 
+//<replaceSource>
 function setupSuperClass(constructor, config) {
 	var superClass = config.inherits;
 	if (superClass)
 		(constructor.prototype = Object.create(superClass.prototype)).super = superClass;
 }
+//</replaceSource>
 
+//<replaceSource>
 function setupClassInterfaces(constructor, config) {
 	var interfaces = config.implements||[];
 	var proto = constructor.prototype;
@@ -53,7 +70,9 @@ function setupClassInterfaces(constructor, config) {
         });
     });
 }
+//</replaceSource>
 
+//<replaceSource>
 function setupClassProperties(constructor, config) {
 	var	proto = constructor.prototype,
 		props = getOwnPropertyNames(config);
@@ -71,6 +90,7 @@ function setupClassProperties(constructor, config) {
 	    }
 	})
 }
+//</replaceSource>
 
 module.exports = {
 	define: define,
