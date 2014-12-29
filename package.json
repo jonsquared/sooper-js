@@ -1,6 +1,6 @@
 {
   "name": "sooper",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Simple Object Oriented Programming inheritance and implementation framework for JavaScript.",
   "keywords": [
     "super",
