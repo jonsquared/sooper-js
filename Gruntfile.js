@@ -60,11 +60,6 @@ module.exports = function(grunt) {
     },
 
     uglify: {
-      options: {
-        compress: {
-          hoist_vars: true
-        }
-      },
       build: {
         files: {
           'build/sooper.js': ['build/sooper.js']

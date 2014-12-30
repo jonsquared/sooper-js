@@ -6,28 +6,29 @@ var o = Object,
 	getOwnPropertyNames = o.getOwnPropertyNames,
 	getOwnPropertyDescriptor = o.getOwnPropertyDescriptor;
 
-function define() {
-	var args = arguments,
-		config = args[1] || args[0],
-		fullName = args.length > 1 && args[0],
-		constructor = config.constructor;
-	if (constructor === Object)
-		constructor = (function(){});
-	if (fullName)
+function define(fullName, config) {
+	var cfg = config,
+		config = cfg || fullName,
+		constructor = config.constructor,
+		superClass = config.inherits,
+		interfaces = config.implements||[];
+	constructor = constructor === Object ? (function(){}) : constructor;
+	if (fullName = cfg && fullName)
 		//<replaceTarget>
 		setupClassNamespace(fullName, constructor);
 		//</replaceTarget>
 
 	//<replaceTarget>
-	setupSuperClass(constructor, config);
+	setupSuperClass(constructor, superClass);
+	//</replaceTarget>
+
+	var proto = constructor.prototype;
+	//<replaceTarget>
+    setupClassInterfaces(proto, interfaces);
 	//</replaceTarget>
 
 	//<replaceTarget>
-    setupClassInterfaces(constructor, config);
-	//</replaceTarget>
-
-	//<replaceTarget>
-	setupClassProperties(constructor, config);
+	setupClassProperties(proto, config);
 	//</replaceTarget>
 
 	return constructor;
@@ -50,20 +51,15 @@ function setupClassNamespace(fullName, constructor) {
 //</replaceSource>
 
 //<replaceSource>
-function setupSuperClass(constructor, config) {
-	var superClass = config.inherits;
+function setupSuperClass(constructor, superClass) {
 	if (superClass)
-		(constructor.prototype = Object.create(superClass.prototype)).super = superClass;
+		(constructor.prototype = o.create(superClass.prototype)).super = superClass;
 }
 //</replaceSource>
 
 //<replaceSource>
-function setupClassInterfaces(constructor, config) {
-	var interfaces = config.implements||[];
-	var proto = constructor.prototype;
-	if (!interfaces.push)
-		interfaces = [interfaces];
-	interfaces.forEach(function(iFace) {
+function setupClassInterfaces(proto, interfaces) {
+	(interfaces.pop ? interfaces : [interfaces]).forEach(function(iFace) {
 		var iproto = iFace.prototype;
 		getOwnPropertyNames(iproto).forEach(function(ipropName) {
 			defineProperty(proto, ipropName, getOwnPropertyDescriptor(iproto, ipropName));
@@ -73,10 +69,8 @@ function setupClassInterfaces(constructor, config) {
 //</replaceSource>
 
 //<replaceSource>
-function setupClassProperties(constructor, config) {
-	var	proto = constructor.prototype,
-		props = getOwnPropertyNames(config);
-    props.forEach(function(propName) {
+function setupClassProperties(proto, config) {
+    getOwnPropertyNames(config).forEach(function(propName) {
     	if (!(propName in {
 				constructor:0,
 				inherits:0,
