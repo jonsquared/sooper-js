@@ -6,92 +6,85 @@ var o = Object,
 	getOwnPropertyNames = o.getOwnPropertyNames,
 	getOwnPropertyDescriptor = o.getOwnPropertyDescriptor;
 
-function define() {
-	var args = arguments,
-		config = args[1] || args[0],
-		fullName = args.length > 1 && args[0];
-	if (config.constructor === Object)
-		config.constructor = (function(){});
-	if (fullName)
-		setupClassNamespace(fullName, config);
-	setupSuperClass(config);
-    setupClassInterfaces(config);
-	setupClassProperties(config);
-	return config.constructor;
+function define(fullName, config) {
+	var cfg = config,
+		config = cfg || fullName,
+		constructor = config.constructor,
+		superClass = config.inherits,
+		interfaces = config.implements||[];
+	constructor = constructor === Object ? (function(){}) : constructor;
+	if (fullName = cfg && fullName)
+		//<replaceTarget>
+		setupClassNamespace(fullName, constructor);
+		//</replaceTarget>
+
+	//<replaceTarget>
+	setupSuperClass(constructor, superClass);
+	//</replaceTarget>
+
+	var proto = constructor.prototype;
+	//<replaceTarget>
+    setupClassInterfaces(proto, interfaces);
+	//</replaceTarget>
+
+	//<replaceTarget>
+	setupClassProperties(proto, config);
+	//</replaceTarget>
+
+	return constructor;
 }
 
-function getNamespaceFromFullName(fullName) {
+//<replaceSource>
+function setupClassNamespace(fullName, constructor) {
 	var names = fullName.split('.'),
+		className = names.pop(),
 		namespace = global;
-	for (var i=0; i<names.length-1; i++) {
-		var nextName = names[i];
-		if (namespace[nextName])
-			namespace = namespace[nextName];
-		else
-			namespace = namespace[nextName] = {};
-	}
-	return namespace;
-}
-
-function setupClassNamespace(fullName, config) {
-	var className = getClassNameFromFullName(fullName),
-		namespace = getNamespaceFromFullName(fullName);
+	names.forEach(function(nextName) {
+		namespace = namespace[nextName] || (namespace[nextName] = {});
+	});
 	//<debug>
 	if (namespace[className])
 		throw new Error('Class "'+className+'" is already defined.');
 	//</debug>
-	namespace[className] = config.constructor;
+	namespace[className] = constructor;
 }
+//</replaceSource>
 
-function setupSuperClass(config) {
-	var superClass = config.inherits;
-	if (superClass) {
-		var c = config.constructor,
-			proto = c.prototype = Object.create(superClass.prototype);
-		proto.super = superClass;
-	}
+//<replaceSource>
+function setupSuperClass(constructor, superClass) {
+	if (superClass)
+		(constructor.prototype = o.create(superClass.prototype)).super = superClass;
 }
+//</replaceSource>
 
-function setupClassProperties(config) {
-	var	proto = config.constructor.prototype,
-		props = getOwnPropertyNames(config);
-    for (var i=props.length; i--; ) {
-    	var propName = props[i];
-    	if (propertyNameIsKeyword(propName))
-    		continue;
-		var overriddenPropVal = proto[propName];
-        defineProperty(proto, propName, getOwnPropertyDescriptor(config, propName));
-        if (overriddenPropVal && (proto[propName] instanceof Function))
-        	proto[propName].super = overriddenPropVal;
-	}
+//<replaceSource>
+function setupClassInterfaces(proto, interfaces) {
+	(interfaces.pop ? interfaces : [interfaces]).forEach(function(iFace) {
+		var iproto = iFace.prototype;
+		getOwnPropertyNames(iproto).forEach(function(ipropName) {
+			defineProperty(proto, ipropName, getOwnPropertyDescriptor(iproto, ipropName));
+        });
+    });
 }
+//</replaceSource>
 
-function propertyNameIsKeyword(propName) {
-	return propName == "constructor" ||
-		   propName == "inherits" ||
-		   propName == "implements";
+//<replaceSource>
+function setupClassProperties(proto, config) {
+    getOwnPropertyNames(config).forEach(function(propName) {
+    	if (!(propName in {
+				constructor:0,
+				inherits:0,
+				implements:0
+			}))
+		{
+			var overriddenPropVal = proto[propName];
+	        defineProperty(proto, propName, getOwnPropertyDescriptor(config, propName));
+	        if (overriddenPropVal && (proto[propName] instanceof Function))
+	        	proto[propName].super = overriddenPropVal;
+	    }
+	})
 }
-
-function setupClassInterfaces(config) {
-	var interfaces = config.implements;
-	if (!interfaces)
-		return;
-	var proto = config.constructor.prototype;
-	if (!interfaces.push)
-		interfaces = [interfaces];
-	for (var iIndex=0; iIndex<interfaces.length; iIndex++ ) {
-		var iproto = interfaces[iIndex].prototype,
-			iprops = getOwnPropertyNames(iproto);
-		for (var ipropIndex=iprops.length; ipropIndex--; ) {
-			var ipropName = iprops[ipropIndex];
-            defineProperty(proto, ipropName, getOwnPropertyDescriptor(iproto, ipropName));
-        }
-    }
-}
-
-function getClassNameFromFullName(fullName) {
-	return fullName.substring(fullName.lastIndexOf('.')+1);
-}
+//</replaceSource>
 
 module.exports = {
 	define: define,

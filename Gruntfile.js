@@ -60,11 +60,6 @@ module.exports = function(grunt) {
     },
 
     uglify: {
-      options: {
-        compress: {
-          hoist_vars: true
-        }
-      },
       build: {
         files: {
           'build/sooper.js': ['build/sooper.js']
@@ -80,7 +75,26 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-file-append');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
+  grunt.registerTask('replaceSingleUseFunctions', function() {
+    var content = grunt.file.read('build/sooper.js'),
+        replacements = {},
+        replaceTargetRegex = /\/\/<replaceTarget>\s*(\w+)\([\s\S]+?\/\/<\/replaceTarget>/gi,
+        match;
+    while(match=replaceTargetRegex.exec(content))
+      replacements[match[1]] = match[0]
+
+    for (var replacement in replacements) {
+      var regex = new RegExp("//<replaceSource>\\s*function\\s*"+replacement+"[^{]+(\\{[\\s\\S]+?\\})\\s*\/\/<\/replaceSource>","gi");
+      var match = regex.exec(content);
+      if (match) {
+        content = content.replace(match[0],"");
+        content = content.replace(replacements[replacement], match[1]);
+      }
+    }
+    grunt.file.write('build/sooper.js',content);
+  });
+
   grunt.registerTask('test', ['jasmine_node','watch']);
-  grunt.registerTask('build', ['jasmine_node','file_append','replace','uglify','jasmine'])
+  grunt.registerTask('build', ['jasmine_node','file_append','replace','replaceSingleUseFunctions','uglify','jasmine'])
   grunt.registerTask('default', ['build']);
 };
