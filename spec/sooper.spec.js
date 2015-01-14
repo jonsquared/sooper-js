@@ -8,7 +8,7 @@ describe('sooper', function() {
 		expect(Object.getOwnPropertyNames(sooper).length).toBe(2);
 		expect(sooper.hasOwnProperty('define')).toBe(true);
 		expect(sooper.hasOwnProperty('version')).toBe(true);
-		expect(sooper.version).toBe("2.1.0");
+		expect(sooper.version).toBe("2.2.0");
 	});
 
 	describe('defining a class', function() {
