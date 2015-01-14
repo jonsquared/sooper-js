@@ -11,8 +11,14 @@ function define(fullName, config) {
 		config = cfg || fullName,
 		constructor = config.constructor,
 		superClass = config.inherits,
-		interfaces = config.implements||[];
+		interfaces = config.implements||[],
+		statics = config.statics;
 	constructor = constructor === Object ? (function(){}) : constructor;
+
+	//<replaceTarget>
+	setupStatics(constructor, statics);
+	//</replaceTarget>
+
 	if (fullName = cfg && fullName)
 		//<replaceTarget>
 		setupClassNamespace(fullName, constructor);
@@ -33,6 +39,13 @@ function define(fullName, config) {
 
 	return constructor;
 }
+
+//<replaceSource>
+function setupStatics(constructor, statics) {
+	for (var propName in statics)
+        defineProperty(constructor, propName, getOwnPropertyDescriptor(statics, propName));
+}
+//</replaceSource>
 
 //<replaceSource>
 function setupClassNamespace(fullName, constructor) {
@@ -74,7 +87,8 @@ function setupClassProperties(proto, config) {
     	if (!(propName in {
 				constructor:0,
 				inherits:0,
-				implements:0
+				implements:0,
+				statics:0
 			}))
 		{
 			var overriddenPropVal = proto[propName];

@@ -214,6 +214,21 @@ describe('sooper', function() {
 				expect(t.value).toBe(42);
 			});
 		});
+
+		describe('with statics', function() {
+			it('has static properties', function() {
+				var TestClass = sooper.define({
+						statics: {
+							VALUE: 42
+						}
+					}),
+					t = new TestClass();
+
+				expect("statics" in t).toBe(false);
+				expect("VALUE" in t).toBe(false);
+				expect(TestClass.VALUE).toBe(42);
+			});
+		});
 	});
 
 	describe('inheriting a class (basic)', function() {
