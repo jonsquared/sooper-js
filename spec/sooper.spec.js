@@ -8,7 +8,7 @@ describe('sooper', function() {
 		expect(Object.getOwnPropertyNames(sooper).length).toBe(2);
 		expect(sooper.hasOwnProperty('define')).toBe(true);
 		expect(sooper.hasOwnProperty('version')).toBe(true);
-		expect(sooper.version).toBe("2.1.0");
+		expect(sooper.version).toBe("2.2.0");
 	});
 
 	describe('defining a class', function() {
@@ -212,6 +212,21 @@ describe('sooper', function() {
 			it('can be instantiated', function() {
 				var t = new (createWithoutNamespace())();
 				expect(t.value).toBe(42);
+			});
+		});
+
+		describe('with statics', function() {
+			it('has static properties', function() {
+				var TestClass = sooper.define({
+						statics: {
+							VALUE: 42
+						}
+					}),
+					t = new TestClass();
+
+				expect("statics" in t).toBe(false);
+				expect("VALUE" in t).toBe(false);
+				expect(TestClass.VALUE).toBe(42);
 			});
 		});
 	});

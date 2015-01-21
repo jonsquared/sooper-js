@@ -25,6 +25,7 @@ To help answer that, here is a list of requirements that initially drove the cre
 * class definition via sooper.define
 * class inheritance via inherits property
 * interface implementation (mixin style) via implements property
+* static properties/methods
 * automatic namespace generation
 * quick access to super constructor and super functions
 * builds to a browser friendly version (see [releases](https://github.com/jonsquared/sooper-js/releases) for minified version)
@@ -44,6 +45,7 @@ Notes:
 * Property descriptors (configurable, enumerable, writable, etc...) will be preserved
 * Reserved properties:
 	* constructor
+	* statics
 	* inherits
 	* implements
 	* super
@@ -73,6 +75,18 @@ var TestClass = (function(){
 
 var test = new TestClass();
 test.getValue(); //42
+```
+
+###With statics
+
+```js
+var TestClass = sooper.define({
+	statics: {
+		ANSWER: 42
+	}
+});
+
+TestClass.ANSWER; //42
 ```
 
 ###Inheriting a super class
